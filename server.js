@@ -18,14 +18,12 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      console.log("Origin:", origin); // helps debug
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: [
+      "http://localhost:5173",
+      "https://auth-frontend-blond.vercel.app"
+    ],
+    methods: "GET,POST,PUT,DELETE,PATCH",
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
