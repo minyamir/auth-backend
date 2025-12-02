@@ -12,15 +12,23 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://https://auth-frontend-blond.vercel.app/"
+  "https://auth-frontend-blond.vercel.app/"
 ];
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      console.log("Origin:", origin); // helps debug
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 
 
 app.use(express.json());
