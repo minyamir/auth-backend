@@ -12,7 +12,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://your-frontend.vercel.app"
+  "https://https://auth-frontend-blond.vercel.app/"
 ];
 
 app.use(
