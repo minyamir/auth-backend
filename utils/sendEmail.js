@@ -8,7 +8,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const sendEmail = async ({ email, subject, message }) => {
   try {
     await resend.emails.send({
-      from: "Mini 9 <minyamirkelemu12@gmail.com>", // VERIFIED Gmail
+      from: "Auth App <onboarding@resend.dev>",
       to: email,
       subject,
       text: message,

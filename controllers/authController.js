@@ -3,9 +3,6 @@ import asyncHandler from "express-async-handler";
 import generateToken from "../utils/generateToken.js";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 // @desc    Register new user
 // @route   POST /api/auth/register
@@ -36,7 +33,6 @@ export const register = asyncHandler(async (req, res) => {
 
   // ---- 2. Send emails ASYNC (background) ----
   setTimeout(async () => {
-    // Admin notification email
     try {
       await sendEmail({
         email: process.env.SMTP_EMAIL,
@@ -48,13 +44,12 @@ export const register = asyncHandler(async (req, res) => {
       console.error("Failed to send admin notification email:", error.message);
     }
 
-    // Welcome email to user using Resend + verified Gmail
     try {
-      await resend.emails.send({
-        from: "Mini 9 <minyamirkelemu12@gmail.com>", // VERIFIED Gmail
-        to: user.email,
-        subject: "Welcome to our platform!",
-        text: `Hi ${user.name}, welcome to our platform! We are really excited to have you on board!`,
+      await sendEmail({
+        email: user.email,
+        subject: "Welcome!",
+        message: `Hi ${user.name}, welcome to our platform!
+        we are really exicted to have you on board!`,
       });
       console.log("Welcome email sent to user.");
     } catch (error) {
@@ -62,6 +57,7 @@ export const register = asyncHandler(async (req, res) => {
     }
   }, 0);
 });
+
 
 // @desc    Login user
 // @route   POST /api/auth/login
@@ -128,7 +124,8 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     res.status(500);
     throw new Error("Email could not be sent");
   }
-});
+}); // <-- THIS line properly closes forgotPassword
+
 
 // @desc    Reset password
 // @route   POST /api/auth/reset-password/:token
